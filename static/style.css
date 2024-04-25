@@ -55,3 +55,9 @@ select:focus {
   outline: none;
   border-color: #666;
 }
+
+#result-container {
+  margin-top: 20px;
+  white-space: pre-wrap;
+  font-family: monospace;
+}

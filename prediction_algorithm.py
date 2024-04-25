@@ -1,10 +1,17 @@
 # Import packages
 import requests
 import json
+import os
 import pandas as pd
 import numpy as np
+from flask import Flask, request, jsonify, render_template
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
-matchweek = 33
+#app = Flask(__name__)
 
 uri_22 = 'https://api.football-data.org/v4/competitions/PL/matches?season=2022'
 headers = { 'X-Auth-Token': '14072c3198154792bff0420b28e91968' }
@@ -12,20 +19,20 @@ headers = { 'X-Auth-Token': '14072c3198154792bff0420b28e91968' }
 response_22 = requests.get(uri_22, headers=headers)
 
 # Load JSON data
-data = response_22.json()['matches']
+data_22 = response_22.json()['matches']
 
 # Create a DataFrame
-df_s22 = pd.DataFrame(data)
+df_s22 = pd.DataFrame(data_22)
 
 uri_23 = 'https://api.football-data.org/v4/competitions/PL/matches?season=2023'
 
 response_23 = requests.get(uri_23, headers=headers)
 
 # Load JSON data
-data = response_23.json()['matches']
+data_23 = response_23.json()['matches']
 
 # Create a DataFrame
-df_s23 = pd.DataFrame(data)
+df_s23 = pd.DataFrame(data_23)
 
 
 def preprocess_dataframe(input_df):
@@ -292,30 +299,10 @@ result_df_s23 = merge_previous_season(totalpoints_s23, previous_season_df)
 # Concatenate the DataFrames vertically
 combined_df = pd.concat([result_df_s22, result_df_s23], ignore_index=True)
 
-# Separating Training and Predicting Data
-training_data = combined_df[(combined_df['seasonid'] == 1490) | (combined_df['matchday'] < matchweek)]
-predicting_data = combined_df[(combined_df['seasonid'] == 1564) & (combined_df['matchday'] == matchweek)]
-
-training_data_s23 = combined_df[(combined_df['seasonid'] == 1564) | (combined_df['matchday'] < matchweek)]
-predicting_data_s23 = combined_df[(combined_df['seasonid'] == 1564) & (combined_df['matchday'] == matchweek)]
-
-
-# ML modelling
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
-from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
-
 features = ['homeTeamid', 'awayTeamid', 'homePoints', 'homeTeamHomeGoals', 'awayTeamAwayGoals', 'awayTeamForm',
             'homeTeamTotalGoals', 'awayTeamTotalGoals', 'homeTeamTotalPoints', 'awayTeamTotalPoints', 'homeTeamPreviousSeason', 'awayTeamPreviousSeason']
 target = 'homeWinDraw'
 target2 = 'awayWinDraw'
-
-# Separate features and target variable from training_data
-X_train = training_data[features]
-y_train = training_data[target]
-y2_train = training_data[target2]
 
 preprocessor = ColumnTransformer(
     transformers=[
@@ -324,45 +311,85 @@ preprocessor = ColumnTransformer(
         ('cat', OneHotEncoder(handle_unknown='ignore'), ['homeTeamid', 'awayTeamid'])
     ])
 
-X_train_preprocessed = preprocessor.fit_transform(X_train)
+print("Current working directory:", os.getcwd())
+print("Templates directory:", os.path.join(os.getcwd(), 'templates'))
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/predict')
+def predict():
+    matchweek = int(request.args.get('matchweek'))
+
+    # Separating Training and Predicting Data
+    training_data = combined_df[(combined_df['seasonid'] == 1490) | (combined_df['matchday'] < matchweek)]
+    predicting_data = combined_df[(combined_df['seasonid'] == 1564) & (combined_df['matchday'] == matchweek)]
+
+    #training_data_s23 = combined_df[(combined_df['seasonid'] == 1564) | (combined_df['matchday'] < matchweek)]
+    #predicting_data_s23 = combined_df[(combined_df['seasonid'] == 1564) & (combined_df['matchday'] == matchweek)]
+
+    # Separate features and target variable from training_data
+    X_train = training_data[features]
+    y_train = training_data[target]
+    y2_train = training_data[target2]
+
+    X_train_preprocessed = preprocessor.fit_transform(X_train)
 
 
 
-# Initialize and train your chosen model (e.g., Logistic Regression)
-model = LogisticRegression()
-model.fit(X_train_preprocessed, y_train)
+    # Initialize and train your chosen model (e.g., Logistic Regression)
+    model = LogisticRegression()
+    model.fit(X_train_preprocessed, y_train)
 
-model2 = LogisticRegression()
-model2.fit(X_train_preprocessed, y2_train)
+    model2 = LogisticRegression()
+    model2.fit(X_train_preprocessed, y2_train)
 
 
-# Separate features from predicting_data
-X_predict = predicting_data[features]
-X_predict_preprocessed = preprocessor.transform(X_predict)
+    # Separate features from predicting_data
+    X_predict = predicting_data[features]
+    X_predict_preprocessed = preprocessor.transform(X_predict)
 
-# Make predictions on predicting_data and add to predictions df
-predictions = model.predict(X_predict_preprocessed)
-predictions2 = model2.predict(X_predict_preprocessed)
+    # Make predictions on predicting_data and add to predictions df
+    predictions = model.predict(X_predict_preprocessed)
+    predictions2 = model2.predict(X_predict_preprocessed)
 
-outcome_df = predicting_data[features]
-outcome_df['homeTeamName'] = predicting_data['homeTeamName']
-outcome_df['awayTeamName'] = predicting_data['awayTeamName']
-outcome_df['home win/draw predictions'] = predictions
-outcome_df['away win/draw predictions'] = predictions2
-#predicting_data['home win/draw predictions'] = predictions
+    outcome_df = predicting_data[features]
+    outcome_df['homeTeamName'] = predicting_data['homeTeamName']
+    outcome_df['awayTeamName'] = predicting_data['awayTeamName']
+    outcome_df['home win/draw predictions'] = predictions
+    outcome_df['away win/draw predictions'] = predictions2
+    #predicting_data['home win/draw predictions'] = predictions
 
-#Get confidence of the prediction
-proba_scores = model.predict_proba(X_predict_preprocessed)
-proba_scores2 = model2.predict_proba(X_predict_preprocessed)
-# If you have a binary classification (2 classes), you can extract the confidence for the positive class
-# In scikit-learn, positive class is usually class index 1
-positive_class_confidences = proba_scores[:, 1]
-positive_class_confidences2 = proba_scores2[:, 1]
+    #Get confidence of the prediction
+    proba_scores = model.predict_proba(X_predict_preprocessed)
+    proba_scores2 = model2.predict_proba(X_predict_preprocessed)
+    print("Probability scores shape:", proba_scores.shape)
+    print("Probability scores:", proba_scores)
+    print("Probability scores 2 shape:", proba_scores2.shape)
+    print("Probability scores 2:", proba_scores2)
 
-outcome_df['home confidence'] = positive_class_confidences
-outcome_df['away confidence'] = positive_class_confidences2
-#predicting_data['confidence'] = positive_class_confidences
 
+    positive_class_confidences = proba_scores[:, 1]
+    positive_class_confidences2 = proba_scores2[:, 1]
+
+    print("Positive class confidences:", positive_class_confidences)
+    print("Positive class confidences 2:", positive_class_confidences2)
+
+    #outcome_df['home confidence'] = positive_class_confidences.round(2)
+    #outcome_df['away confidence'] = positive_class_confidences2.round(2)
+    outcome_df['home confidence'] = positive_class_confidences
+    outcome_df['away confidence'] = positive_class_confidences2
+    print("home confidence: ", outcome_df['home confidence'])
+    print("away confidence: ", outcome_df['away confidence'])
+    #predicting_data['confidence'] = positive_class_confidences
+
+    return jsonify(outcome_df.to_dict(orient='records'))
 
 #predicting_data
-print(outcome_df)
+#print(outcome_df)
+
+if __name__ == '__main__':
+    app.run(debug=True)
