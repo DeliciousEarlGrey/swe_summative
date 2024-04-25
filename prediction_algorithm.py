@@ -11,8 +11,6 @@ from sklearn.metrics import accuracy_score
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
-#app = Flask(__name__)
-
 uri_22 = 'https://api.football-data.org/v4/competitions/PL/matches?season=2022'
 headers = { 'X-Auth-Token': '14072c3198154792bff0420b28e91968' }
 
@@ -328,9 +326,6 @@ def predict():
     training_data = combined_df[(combined_df['seasonid'] == 1490) | (combined_df['matchday'] < matchweek)]
     predicting_data = combined_df[(combined_df['seasonid'] == 1564) & (combined_df['matchday'] == matchweek)]
 
-    #training_data_s23 = combined_df[(combined_df['seasonid'] == 1564) | (combined_df['matchday'] < matchweek)]
-    #predicting_data_s23 = combined_df[(combined_df['seasonid'] == 1564) & (combined_df['matchday'] == matchweek)]
-
     # Separate features and target variable from training_data
     X_train = training_data[features]
     y_train = training_data[target]
@@ -361,7 +356,7 @@ def predict():
     outcome_df['awayTeamName'] = predicting_data['awayTeamName']
     outcome_df['home win/draw predictions'] = predictions
     outcome_df['away win/draw predictions'] = predictions2
-    #predicting_data['home win/draw predictions'] = predictions
+    
 
     #Get confidence of the prediction
     proba_scores = model.predict_proba(X_predict_preprocessed)
@@ -378,18 +373,16 @@ def predict():
     print("Positive class confidences:", positive_class_confidences)
     print("Positive class confidences 2:", positive_class_confidences2)
 
-    #outcome_df['home confidence'] = positive_class_confidences.round(2)
-    #outcome_df['away confidence'] = positive_class_confidences2.round(2)
-    outcome_df['home confidence'] = positive_class_confidences
-    outcome_df['away confidence'] = positive_class_confidences2
-    print("home confidence: ", outcome_df['home confidence'])
-    print("away confidence: ", outcome_df['away confidence'])
-    #predicting_data['confidence'] = positive_class_confidences
+    outcome_df['home_confidence'] = (positive_class_confidences*100).round(2)
+    outcome_df['away_confidence'] = (positive_class_confidences2*100).round(2)
+    
+    print("home confidence: ", outcome_df['home_confidence'])
+    print("away confidence: ", outcome_df['away_confidence'])
+    
 
     return jsonify(outcome_df.to_dict(orient='records'))
 
-#predicting_data
-#print(outcome_df)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

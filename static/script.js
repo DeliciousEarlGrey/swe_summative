@@ -1,23 +1,3 @@
-// document.addEventListener('DOMContentLoaded', function() {
-//     var matchweekSelect = document.getElementById('matchweek-select');
-//     var resultContainer = document.getElementById('result-container');
-    
-//     matchweekSelect.addEventListener('change', function() {
-//         var selectedWeek = parseInt(this.value);
-        
-//         // Make an API request to the Python script
-//         fetch('/predict?matchweek=' + selectedWeek)
-//             .then(response => response.json())
-//             .then(data => {
-//                 // Display the resulting dataframe in the result container
-//                 resultContainer.textContent = JSON.stringify(data, null, 2);
-//             })
-//             .catch(error => {
-//                 console.error('Error:', error);
-//             });
-//     });
-// });
-
 document.addEventListener('DOMContentLoaded', function() {
     var matchweekSelect = document.getElementById('matchweek-select');
     var resultContainer = document.getElementById('result-container');
@@ -34,6 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Loop through the data and create elements for each match
                 data.forEach(match => {
+                    console.log("Match Data:", match);
+
                     var matchDiv = document.createElement('div');
                     matchDiv.classList.add('match');
                     
@@ -44,10 +26,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     awayTeam.textContent = match.awayTeamName;
                     
                     var homeConfidence = document.createElement('span');
-                    homeConfidence.textContent = 'Home Confidence: ' + (match.home_confidence*100).toFixed(2) + '%';
+                    homeConfidence.textContent = 'Home Confidence: ' + match.home_confidence + '%';
 
                     var awayConfidence = document.createElement('span');
-                    awayConfidence.textContent = 'Away Confidence: ' + (match.away_confidence*100).toFixed(2) + '%';
+                    awayConfidence.textContent = 'Away Confidence: ' + match.away_confidence + '%';
+
+
+
 
                     matchDiv.appendChild(homeTeam);
                     matchDiv.appendChild(document.createTextNode(' vs '));
