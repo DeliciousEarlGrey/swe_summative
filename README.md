@@ -34,7 +34,9 @@ DeepFoot is designed to be used as an educational resource, demonstrating how ma
 ## Usage
 
 1. Select a matchweek from the dropdown menu on the homepage.
+   ![Select week](select-week.png)
 2. View the predicted results for each match, including team names and confidence percentages.
+   ![View matches](match-list.png)
 
 
 ## Configuration
