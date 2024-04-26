@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="description" content="DeepFoot is an educational tool that demonstrates the application of machine learning and web development technologies in predicting Premier League football match outcomes.">
     <title>DeepFoot</title>
 </head>
 <body>
@@ -11,6 +12,7 @@
         <h1>Welcome to DeepFoot</h1>
         <p>The site that uses Machine Learning algorithms to predict Premier League results</p>
         <h2>Pick a matchweek to see match predictions</h2>
+        <label for="matchweek-select">Select a matchweek:</label>
         <select id="matchweek-select">
             <option value="" disabled selected>Matchweek</option>
             <option value="1">Week 1</option>
