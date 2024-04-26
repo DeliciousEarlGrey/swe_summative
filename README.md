@@ -44,8 +44,8 @@ DeepFoot is designed to be used as an educational resource, demonstrating how ma
 The following configuration options are available:
 
 - `API_ENDPOINT`: The URL endpoint for retrieving football data (default: "https://api.football-data.org/v2/")
-- `TRAINING_SEASONS`: The range of seasons to use for training the machine learning model (default: ["2019-20", "2020-21"])
-- `PREDICTION_SEASON`: The season for which predictions are generated (default: "2021-22")
+- `TRAINING_SEASONS`: The range of seasons to use for training the machine learning model (default: ["2021-22", "2022-23"])
+- `PREDICTION_SEASON`: The season for which predictions are generated (default: "2023-24")
 
 
 ## License
