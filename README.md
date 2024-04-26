@@ -55,3 +55,7 @@ This project is licensed under the [MIT License](LICENSE).
 ## Contact
 
 If you have any questions, suggestions, or feedback, please feel free to get in touch.
+
+## Feedback
+[Cick here](https://docs.google.com/forms/d/e/1FAIpQLSfsMwCWWPhYYklwSqT3HUjzb94fkvBH9x0rgP8abqg20urFTg/viewform) to get involved with improving the app!
+
