@@ -85,3 +85,92 @@ While initial planning is important, it's essential to recognise that planning i
 Collaborating closely with team members, stakeholders, and end-users is important for the success of the project. Regularly seeking feedback, incorporating insights, and communicating well contribute to delivering a high-quality product.
 The Kanban method promotes agility and flexibility in project management.
 
+
+## Capturing Requirements
+In order to capture requirements its important to understand the needs of all stakeholders and translate these needs into specific features and functionalities. In this case, we wanted to capture the needs of the users (people who want to learn about the potential for combining Machine Learning with webapp technologies), and administartors (those onvolved with hosting and funding the web application). This involved a process of stakeholder analysis, gathering user stories, defining functional requirements, determining data needs, defining technical architecture, developing prototypes, and reviewing feedback. This led to the following set of requirements, which have evolved over the course of the project. While most of these tasks have been completed, some of them, such as adding additional features, outline improvements that could be implemented in future iterations.
+
+### Set up project structure
+
+Create a new GitHub repository
+Initialise the project with necessary files and folders
+Set up a virtual environment for the project
+
+
+### Design and implement the machine learning model
+
+Research and select appropriate features for predicting match outcomes
+Collect and preprocess historical Premier League match data
+Train and evaluate different machine learning algorithms
+Fine-tune and optimise the chosen model
+Implement the final model in the project
+
+
+### Develop the backend API
+
+Design the API endpoints for retrieving predictions
+Implement the API using a web framework (Flask)
+Integrate the machine learning model with the API
+Test and debug the API functionality
+
+
+### Create the frontend user interface
+
+Design the layout and components of the web application
+Implement the user interface using HTML, CSS, and JavaScript
+Integrate with the backend API to retrieve and display predictions
+Implement user interactions and dynamic behavior
+
+
+### Implement match selection functionality
+
+Add a dropdown or selection mechanism for users to choose a specific matchweek
+Retrieve the list of available matchweeks from the backend API
+Update the user interface based on the selected matchweek
+
+
+### Display match predictions
+
+Retrieve the predicted outcomes for each match from the backend API
+Present the predictions in a visually appealing and intuitive format
+Include team names, logos, and prediction percentages
+Highlight the predicted winner or draw
+
+
+### Improve prediction accuracy
+
+Gather feedback and analyze the performance of the machine learning model
+Identify areas for improvement and collect additional relevant features
+Retrain and update the model with new data and features
+Monitor and evaluate the model's accuracy over time
+
+
+### Enhance user experience
+
+Implement responsive design to ensure compatibility across devices
+Improve the visual aesthetics and layout of the application
+Add loading indicators or progress bars for better user feedback
+Implement error handling and user-friendly error messages
+
+
+### Optimise application performance
+
+Profile and analyze the performance bottlenecks
+Implement caching mechanisms to speed up data retrieval
+Optimize database queries and API responses
+Minify and compress assets to reduce load times
+
+
+### Deploy the application
+
+Choose a suitable hosting platform (e.g., Heroku, AWS)
+Configure the necessary environment variables and dependencies
+Set up automatic deployment pipelines
+Ensure the application is secure and scalable
+
+
+### Add additional features
+
+Implement user authentication and personalized predictions
+Allow users to save their favorite teams or leagues
+Provide historical data and trends for teams and matches
+Integrate with external data sources for real-time updates
