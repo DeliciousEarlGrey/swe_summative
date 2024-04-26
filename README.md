@@ -1,6 +1,6 @@
 # swe_summative: DeepFoot
 
-DeepFoot is an educational tool that showcases the potential of machine learning and web development technologies in creating interactive and predictive applications. Ot uses a machine learning model trained on historical Premier League match data to predict the outcomes of upcoming matches on a week-by-week basis.
+DeepFoot is an educational tool that showcases the potential of machine learning and web development technologies in creating interactive and predictive applications. It uses a machine learning model trained on historical Premier League match data to predict the outcomes of upcoming matches on a week-by-week basis.
 
 The frontend of the application provides a user-friendly interface where users can select a specific matchweek and view the predicted results for each match. The predictions include the likelihood of a home win/draw or an away win/draw, expressed as percentages.
 
@@ -11,7 +11,7 @@ DeepFoot is designed to be used as an educational resource, demonstrating how ma
 ## Features
 
 - Predicts the likelihood of a home win/draw or an away win/draw for each match in a selected matchweek
-- Utilizes a logistic regression model trained on historical Premier League match data
+- Uses a logistic regression model trained on historical Premier League match data
 - Provides a user-friendly web interface for selecting matchweeks and viewing predictions
 - Displays team names, and prediction percentages for each match
 
